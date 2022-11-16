@@ -1,4 +1,4 @@
-package com.amazon.seller.shipping.web.response;
+package com.amazon.seller.shipping.service;
 
 import com.amazon.seller.shipping.model.SellingParty;
 import com.amazon.seller.shipping.model.ShipFromParty;
@@ -14,7 +14,8 @@ import java.util.ArrayList;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ShippingLabelResponse {
+public class ShippingLabelModelResponse {
+
     private ArrayList<ShippingLabelData> labelData;
     private SellingParty sellingParty;
     private String labelFormat;

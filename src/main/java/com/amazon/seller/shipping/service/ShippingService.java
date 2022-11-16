@@ -1,8 +1,11 @@
 package com.amazon.seller.shipping.service;
 
 import com.amazon.SellingPartnerAPIAA.AWSSigV4Signer;
+import com.amazon.seller.shipping.model.SellingParty;
+import com.amazon.seller.shipping.model.ShipFromParty;
 import com.amazon.seller.shipping.service.helper.TokenCreator;
 import com.amazon.seller.shipping.web.request.ShippingLabelRequest;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.squareup.okhttp.*;
 import io.swagger.client.model.RestrictedResource;
@@ -30,7 +33,7 @@ public class ShippingService {
     @Autowired
     TokenCreator tokenCreator;
 
-    public String createShippingLabel(ShippingLabelRequest shippingLabelRequest) throws Exception {
+    public ShippingLabelModelResponse createShippingLabel(ShippingLabelRequest shippingLabelRequest) throws Exception {
         String[] dataElements = {};
         String restrictedDataToken = tokenCreator.getRestrictedDataToken(shippingLabelRequest, resourcePath, dataElements);
         log.info("The restricted data token is " + restrictedDataToken);
@@ -48,7 +51,9 @@ public class ShippingService {
 
         Response response = buildAndExecuteRestrictedRequest(shippingLabelRequest, restrictedResource, restrictedDataToken, requestBody);
         log.info("Shipping label success");
-        return response.body().string();
+        ObjectMapper objectMapper = new ObjectMapper();
+        return objectMapper.readValue(response.body().string(),ShippingLabelModelResponse.class);
+
     }
 
 

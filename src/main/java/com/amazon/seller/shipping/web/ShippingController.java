@@ -1,5 +1,6 @@
 package com.amazon.seller.shipping.web;
 
+import com.amazon.seller.shipping.service.ShippingLabelModelResponse;
 import com.amazon.seller.shipping.service.ShippingService;
 import com.amazon.seller.shipping.web.mapper.ShippingLabelResponseMapper;
 import com.amazon.seller.shipping.web.request.ShippingLabelRequest;
@@ -19,8 +20,8 @@ public class ShippingController {
     private ShippingService shippingService;
 
     @PostMapping(value = "/createLabel")
-    public ShippingLabelResponse createShippingLabel(@RequestBody ShippingLabelRequest request) throws Exception {
+    public ShippingLabelModelResponse createShippingLabel(@RequestBody ShippingLabelRequest request) throws Exception {
         log.info("The shipping label request from vendor is "+request.toString());
-        return ShippingLabelResponseMapper.newShippingLabelResponse(shippingService.createShippingLabel(request));
+        return shippingService.createShippingLabel(request);
     }
 }
