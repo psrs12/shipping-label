@@ -1,0 +1,16 @@
+lwa:
+  client_id:
+  client_secret:
+  endpoint: https://api.amazon.com/auth/O2/token
+  refresh_token:
+aws:
+  access_key:
+  secret_key:
+  region:
+restricted:
+  resource_path: /vendor/directFulfillment/shipping/2021-12-28/shippingLabels/{something}
+  resource_method: POST
+
+RDT_endpoint: https://sellingpartnerapi-na.amazon.com
+shipping_label_endpoint: https://sellingpartnerapi-na.amazon.com/vendor/directFulfillment/shipping/2021-12-28/shippingLabels/
+

@@ -1,0 +1,16 @@
+/*.bak
+/target/classes/*.yaml
+/target/classes/com/amazon/seller/shipping/*.class
+/target/classes/com/amazon/seller/shipping/service/*.class
+/target/classes/com/amazon/seller/shipping/service/helper/*.class
+/target/classes/com/amazon/seller/shipping/web/*.class
+/target/classes/com/amazon/seller/shipping/web/mapper/*.class
+/target/classes/com/amazon/seller/shipping/web/request/*.class
+/target/classes/com/amazon/seller/shipping/web/response/*.class
+/target/maven-archiver/*.properties
+/target/maven-status/maven-compiler-plugin/compile/default-compile/*.lst
+/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/*.lst
+/target/*.jar
+/target/surefire-reports/*.xml
+/target/surefire-reports/*.txt
+/target/test-classes/com/amazon/seller/shipping/*.class
