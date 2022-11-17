@@ -17,4 +17,5 @@ public class ShippingLabelRequest {
     private String orderNumber;
     private String sellingPartyId;
     private String shipFromPartyId;
+    private String containerList;
 }

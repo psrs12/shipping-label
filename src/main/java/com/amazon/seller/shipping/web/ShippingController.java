@@ -22,6 +22,7 @@ public class ShippingController {
     @PostMapping(value = "/createLabel")
     public ShippingLabelModelResponse createShippingLabel(@RequestBody ShippingLabelRequest request) throws Exception {
         log.info("The shipping label request from vendor is "+request.toString());
-        return shippingService.createShippingLabel(request);
+        ShippingLabelModelResponse response = shippingService.createShippingLabel(request);
+            return response;
     }
 }

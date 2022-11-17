@@ -10,6 +10,7 @@ import com.google.gson.Gson;
 import com.squareup.okhttp.*;
 import io.swagger.client.model.RestrictedResource;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -37,26 +38,34 @@ public class ShippingService {
         String[] dataElements = {};
         String restrictedDataToken = tokenCreator.getRestrictedDataToken(shippingLabelRequest, resourcePath, dataElements);
         log.info("The restricted data token is " + restrictedDataToken);
-
-        ShippingLabelModelRequest shippingLabelModelRequest = ShippingLabelModelRequest
-                .builder()
-                .shipFromParty(new ShipFromParty(shippingLabelRequest.getShipFromPartyId()))
-                .sellingParty(new SellingParty(shippingLabelRequest.getSellingPartyId()))
-                .build();
-        Gson gson = new Gson();
-        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), gson.toJson(shippingLabelModelRequest));
         RestrictedResource restrictedResource = new RestrictedResource();
         restrictedResource.setMethod(RestrictedResource.MethodEnum.fromValue(resourceMethod));
         restrictedResource.setPath(shippingLabelRequest.getOrderNumber());
-
-        Response response = buildAndExecuteRestrictedRequest(shippingLabelRequest, restrictedResource, restrictedDataToken, requestBody);
+        Response response = buildAndExecuteRestrictedRequest(shippingLabelRequest, restrictedResource, restrictedDataToken, getRequestBody(shippingLabelRequest));
         log.info("Shipping label success");
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.readValue(response.body().string(),ShippingLabelModelResponse.class);
 
     }
 
+    private RequestBody getRequestBody(ShippingLabelRequest shippingLabelRequest){
+        RequestBody requestBody=null;
+        Gson gson = new Gson();
+        if(StringUtils.isEmpty(shippingLabelRequest.getContainerList()) ){
+            ShippingLabelModelRequest shippingLabelModelRequest = ShippingLabelModelRequest
+                    .builder()
+                    .shipFromParty(new ShipFromParty(shippingLabelRequest.getShipFromPartyId()))
+                    .sellingParty(new SellingParty(shippingLabelRequest.getSellingPartyId()))
+                    .build();
 
+             requestBody = RequestBody.create(MediaType.parse("application/json"), gson.toJson(shippingLabelModelRequest));
+        }else{
+            String contentList=shippingLabelRequest.getContainerList().replaceAll("\n", "");
+            log.info("the content list "+contentList);
+            requestBody = RequestBody.create(MediaType.parse("application/json"), contentList);
+        }
+        return requestBody;
+    }
     // An example of a helper method to build, sign, and execute a restricted operation, specifying RestrictedResource, (String) RDT, and RequestBody.
     // Returns the restricted operation Response object.
     private Response buildAndExecuteRestrictedRequest(ShippingLabelRequest request, RestrictedResource resource, String restrictedDataToken, RequestBody requestBody) throws IOException {
@@ -81,10 +90,6 @@ public class ShippingService {
         // Execute the signed request.
         OkHttpClient okHttpClient = new OkHttpClient();
         Response response = okHttpClient.newCall(signedRequest).execute();
-
-        // Check the restricted operation response status code and headers.
-        System.out.println(response.code());
-        System.out.println(response.headers());
         return response;
     }
 
