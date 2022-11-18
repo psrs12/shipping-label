@@ -1,0 +1,656 @@
+<p class="tab-header">Code snippets</p>
+            <div class="hr-a"></div>
+            <ul class="nav nav-tabs-a" id="CodeSnippetTab">
+            <li id="JAVASnippet" class="active ResponseTab"><a href="#JAVASection">JAVA</a></li>
+              <!-- TODO Code Snippets in other Languages -->
+              <li id="PHPSnippet" class="ResponseTab" data-toggle="tab"><a href="#PHPSection">PHP</a></li>
+              <!-- <li id="RORSnippet" class="ResponseTab"><a href="#RORSection">ROR</a></li>
+              <li id="HTMLSnippet" class="ResponseTab"><a href="#HTMLSection">AddToCart HTML </a></li> -->
+            <li id="cURLSnippet" class="ResponseTab"><a href="#cURLSection">cURL</a></li>
+            </ul><!-- Tabs of Code Snippet -->
+            <div class="tab-content">
+              <div id="JAVASection" class="tab-pane fade in active">
+                <div class="well-CS">
+                  <span id="CopyJAVA" class="btn-clipboard btn-clipboard-CodeCopy" data-toggle="tooltip" data-clipboard-target="#JAVACode" data-placement="top" title="" data-original-title="Copy to clipboard">Copy</span><span id="FullScreenJAVA" class="btn-clipboard-Code" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Full screen"><span class="glyphicon glyphicon-modal-window"></span></span><pre class="pre-scrollable"><code class="java JAVAHJS hljs" id="JAVACode" style="background:#fff;"><span class="hljs-comment">/* Copyright 2018 Amazon.com, Inc. or its affiliates. All Rights Reserved. */</span>
+<span class="hljs-comment">/* Licensed under the Apache License, Version 2.0. */</span>
+
+<span class="hljs-comment">/**
+ * Download the following artifacts and add to your projects classpath:
+ *   o httpclient-4.5.5.jar
+ *   o httpcore-4.4.9.jar
+ *   o commons-logging-1.2.jar
+ *   o json-20180130.jar
+ * Put your Secret Key in place of **********
+ * Make sure AWSV4Auth Class is available in same package
+*/</span>
+
+<span class="hljs-keyword">package</span> com.amazon.paapi.scratchpad;
+
+<span class="hljs-keyword">import</span> java.util.Map;
+<span class="hljs-keyword">import</span> java.util.TreeMap;
+<span class="hljs-keyword">import</span> java.nio.charset.StandardCharsets;
+
+<span class="hljs-keyword">import</span> org.apache.http.HttpEntity;
+<span class="hljs-keyword">import</span> org.apache.http.HttpResponse;
+<span class="hljs-keyword">import</span> org.apache.http.client.HttpClient;
+<span class="hljs-keyword">import</span> org.apache.http.client.methods.HttpPost;
+<span class="hljs-keyword">import</span> org.apache.http.entity.StringEntity;
+<span class="hljs-keyword">import</span> org.apache.http.impl.client.HttpClientBuilder;
+<span class="hljs-keyword">import</span> org.apache.http.util.EntityUtils;
+<span class="hljs-keyword">import</span> org.json.JSONArray;
+<span class="hljs-keyword">import</span> org.json.JSONObject;
+<span class="hljs-keyword">import</span> com.amazon.paapi.scratchpad.AWSV4Auth;
+
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> &lt;&lt; <span class="hljs-title">OP</span> <span class="hljs-title">NAME</span> &gt;&gt; </span>{
+
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> String HOST = <span class="hljs-string">"&lt;&lt; HOST NAME &gt;&gt;"</span>;
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> String URI_PATH = <span class="hljs-string">"/&lt;&lt; URI PATH &gt;&gt;"</span>;
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> String ACCESS_KEY = <span class="hljs-string">"&lt;&lt; ACCESS_KEY &gt;&gt;"</span>;
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> String SECRET_KEY = <span class="hljs-string">"**********"</span>;
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> String REGION = <span class="hljs-string">"&lt;&lt; REGION &gt;&gt;"</span>;
+
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> Exception </span>{
+
+        String requestPayload =
+        <span class="hljs-string">"&lt;&lt; PAYLOAD &gt;&gt;"</span>;
+
+        TreeMap&lt;String, String&gt; headers = <span class="hljs-keyword">new</span> TreeMap&lt;String, String&gt;();
+        headers.put(<span class="hljs-string">"host"</span>, HOST);
+        headers.put(<span class="hljs-string">"content-type"</span>, <span class="hljs-string">"application/json; charset=UTF-8"</span>);
+        headers.put(<span class="hljs-string">"x-amz-target"</span>, <span class="hljs-string">"&lt;&lt; REQUEST TARGET &gt;&gt;"</span>);
+        headers.put(<span class="hljs-string">"content-encoding"</span>, <span class="hljs-string">"amz-1.0"</span>);
+
+        AWSV4Auth awsv4Auth =
+            <span class="hljs-keyword">new</span> AWSV4Auth.Builder(ACCESS_KEY, SECRET_KEY)
+                .path(URI_PATH)
+                .region(REGION)
+                .service(<span class="hljs-string">"ProductAdvertisingAPI"</span>)
+                .httpMethodName(<span class="hljs-string">"POST"</span>)
+                .headers(headers)
+                .payload(requestPayload)
+                .build();
+
+        HttpClient client = HttpClientBuilder.create().build();
+        HttpPost httpPost = <span class="hljs-keyword">new</span> HttpPost(<span class="hljs-string">"https://"</span> + HOST + URI_PATH);
+        httpPost.setEntity(<span class="hljs-keyword">new</span> StringEntity(requestPayload));
+        Map&lt;String, String&gt; header = awsv4Auth.getHeaders();
+        <span class="hljs-keyword">for</span> (Map.Entry&lt;String, String&gt; entrySet : header.entrySet()) {
+            httpPost.addHeader(entrySet.getKey(), entrySet.getValue());
+        }
+
+        HttpResponse response = client.execute(httpPost);
+        HttpEntity entity = response.getEntity();
+        String jsonResponse = EntityUtils.toString(entity, StandardCharsets.UTF_8);
+        <span class="hljs-keyword">int</span> statusCode = response.getStatusLine().getStatusCode();
+        System.out.println(jsonResponse);
+        <span class="hljs-keyword">if</span>(statusCode == <span class="hljs-number">200</span>) {
+            System.out.println(<span class="hljs-string">"Successfully received response from Product Advertising API."</span>);
+            System.out.println(jsonResponse);
+        } <span class="hljs-keyword">else</span> {
+            JSONObject json = <span class="hljs-keyword">new</span> JSONObject(jsonResponse);
+            <span class="hljs-keyword">if</span>(json.has(<span class="hljs-string">"Errors"</span>)) {
+                JSONArray errorArray = json.getJSONArray(<span class="hljs-string">"Errors"</span>);
+                <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; errorArray.length(); i++) {
+                    JSONObject e = errorArray.getJSONObject(i);
+                    System.out.println(<span class="hljs-string">"Error Code: "</span>+e.get(<span class="hljs-string">"Code"</span>)+<span class="hljs-string">", Message: "</span>+e.get(<span class="hljs-string">"Message"</span>));
+                }
+            } <span class="hljs-keyword">else</span> {
+                System.out.println(<span class="hljs-string">"Error Code: InternalFailure, Message: The request processing has failed because of an unknown error, exception or failure. Please retry again."</span>);
+            }
+        }
+    }
+}
+</code></pre>
+                  <div id="JAVAModal" class="modal fade" role="dialog">
+                    <div class="modal-dialog modal-lg">
+                      <div class="modal-content" style="height:100%;">
+                        <div class="modal-header">
+                          <button class="close" type="button" data-dismiss="modal">×</button>
+                          <h4 class="modal-title">JAVA code snippet</h4>
+                        </div>
+                        <div class="modal-body">
+                          <span id="CopyJAVAModal" class="btn-clipboard btn-clipboard-Modal" data-toggle="tooltip" data-clipboard-target="#JAVACodeModal" data-placement="left" title="" data-original-title="Copy to clipboard">Copy</span><pre class="pre-scrollable-modal"><code class="JAVAHJS java hljs" id="JAVACodeModal" style="background:#fff;"><span class="hljs-comment">/* Copyright 2018 Amazon.com, Inc. or its affiliates. All Rights Reserved. */</span>
+<span class="hljs-comment">/* Licensed under the Apache License, Version 2.0. */</span>
+
+<span class="hljs-comment">/**
+ * Download the following artifacts and add to your projects classpath:
+ *   o httpclient-4.5.5.jar
+ *   o httpcore-4.4.9.jar
+ *   o commons-logging-1.2.jar
+ *   o json-20180130.jar
+ * Put your Secret Key in place of **********
+ * Make sure AWSV4Auth Class is available in same package
+*/</span>
+
+<span class="hljs-keyword">package</span> com.amazon.paapi.scratchpad;
+
+<span class="hljs-keyword">import</span> java.util.Map;
+<span class="hljs-keyword">import</span> java.util.TreeMap;
+<span class="hljs-keyword">import</span> java.nio.charset.StandardCharsets;
+
+<span class="hljs-keyword">import</span> org.apache.http.HttpEntity;
+<span class="hljs-keyword">import</span> org.apache.http.HttpResponse;
+<span class="hljs-keyword">import</span> org.apache.http.client.HttpClient;
+<span class="hljs-keyword">import</span> org.apache.http.client.methods.HttpPost;
+<span class="hljs-keyword">import</span> org.apache.http.entity.StringEntity;
+<span class="hljs-keyword">import</span> org.apache.http.impl.client.HttpClientBuilder;
+<span class="hljs-keyword">import</span> org.apache.http.util.EntityUtils;
+<span class="hljs-keyword">import</span> org.json.JSONArray;
+<span class="hljs-keyword">import</span> org.json.JSONObject;
+<span class="hljs-keyword">import</span> com.amazon.paapi.scratchpad.AWSV4Auth;
+
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> &lt;&lt; <span class="hljs-title">OP</span> <span class="hljs-title">NAME</span> &gt;&gt; </span>{
+
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> String HOST = <span class="hljs-string">"&lt;&lt; HOST NAME &gt;&gt;"</span>;
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> String URI_PATH = <span class="hljs-string">"/&lt;&lt; URI PATH &gt;&gt;"</span>;
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> String ACCESS_KEY = <span class="hljs-string">"&lt;&lt; ACCESS_KEY &gt;&gt;"</span>;
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> String SECRET_KEY = <span class="hljs-string">"**********"</span>;
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> String REGION = <span class="hljs-string">"&lt;&lt; REGION &gt;&gt;"</span>;
+
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> Exception </span>{
+
+        String requestPayload =
+        <span class="hljs-string">"&lt;&lt; PAYLOAD &gt;&gt;"</span>;
+
+        TreeMap&lt;String, String&gt; headers = <span class="hljs-keyword">new</span> TreeMap&lt;String, String&gt;();
+        headers.put(<span class="hljs-string">"host"</span>, HOST);
+        headers.put(<span class="hljs-string">"content-type"</span>, <span class="hljs-string">"application/json; charset=UTF-8"</span>);
+        headers.put(<span class="hljs-string">"x-amz-target"</span>, <span class="hljs-string">"&lt;&lt; REQUEST TARGET &gt;&gt;"</span>);
+        headers.put(<span class="hljs-string">"content-encoding"</span>, <span class="hljs-string">"amz-1.0"</span>);
+
+        AWSV4Auth awsv4Auth =
+            <span class="hljs-keyword">new</span> AWSV4Auth.Builder(ACCESS_KEY, SECRET_KEY)
+                .path(URI_PATH)
+                .region(REGION)
+                .service(<span class="hljs-string">"ProductAdvertisingAPI"</span>)
+                .httpMethodName(<span class="hljs-string">"POST"</span>)
+                .headers(headers)
+                .payload(requestPayload)
+                .build();
+
+        HttpClient client = HttpClientBuilder.create().build();
+        HttpPost httpPost = <span class="hljs-keyword">new</span> HttpPost(<span class="hljs-string">"https://"</span> + HOST + URI_PATH);
+        httpPost.setEntity(<span class="hljs-keyword">new</span> StringEntity(requestPayload));
+        Map&lt;String, String&gt; header = awsv4Auth.getHeaders();
+        <span class="hljs-keyword">for</span> (Map.Entry&lt;String, String&gt; entrySet : header.entrySet()) {
+            httpPost.addHeader(entrySet.getKey(), entrySet.getValue());
+        }
+
+        HttpResponse response = client.execute(httpPost);
+        HttpEntity entity = response.getEntity();
+        String jsonResponse = EntityUtils.toString(entity, StandardCharsets.UTF_8);
+        <span class="hljs-keyword">int</span> statusCode = response.getStatusLine().getStatusCode();
+        System.out.println(jsonResponse);
+        <span class="hljs-keyword">if</span>(statusCode == <span class="hljs-number">200</span>) {
+            System.out.println(<span class="hljs-string">"Successfully received response from Product Advertising API."</span>);
+            System.out.println(jsonResponse);
+        } <span class="hljs-keyword">else</span> {
+            JSONObject json = <span class="hljs-keyword">new</span> JSONObject(jsonResponse);
+            <span class="hljs-keyword">if</span>(json.has(<span class="hljs-string">"Errors"</span>)) {
+                JSONArray errorArray = json.getJSONArray(<span class="hljs-string">"Errors"</span>);
+                <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; errorArray.length(); i++) {
+                    JSONObject e = errorArray.getJSONObject(i);
+                    System.out.println(<span class="hljs-string">"Error Code: "</span>+e.get(<span class="hljs-string">"Code"</span>)+<span class="hljs-string">", Message: "</span>+e.get(<span class="hljs-string">"Message"</span>));
+                }
+            } <span class="hljs-keyword">else</span> {
+                System.out.println(<span class="hljs-string">"Error Code: InternalFailure, Message: The request processing has failed because of an unknown error, exception or failure. Please retry again."</span>);
+            }
+        }
+    }
+}
+</code></pre>
+                        </div>
+                      </div>
+                    </div>
+                  </div><!-- JAVA Modal -->
+                </div>
+              </div><!-- JAVA Section -->
+              <div id="cURLSection" class="tab-pane fade">
+                <div class="well-CS">
+                  <span id="CopycURLResponse" class="btn-clipboard btn-clipboard-CodeCopy" data-toggle="tooltip" data-clipboard-target="#cURLCode" data-placement="top" title="" data-original-title="Copy to clipboard">Copy</span><span id="FullScreencURL" class="btn-clipboard-Code" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Full screen"><span class="glyphicon glyphicon-modal-window"></span></span><pre class="pre-scrollable"><code class="bash cURLHJS hljs" id="cURLCode" style="background:#fff;">curl <span class="hljs-string">"https://&lt;&lt; ENDPOINT &gt;&gt;"</span> \
+-H <span class="hljs-string">"Host: &lt;&lt; HOST NAME &gt;&gt;"</span>  \
+-H <span class="hljs-string">"Accept: application/json, text/javascript"</span> \
+-H <span class="hljs-string">"Accept-Language: en-US"</span> \
+-H <span class="hljs-string">"Content-Type: application/json; charset=UTF-8"</span> \
+-H <span class="hljs-string">"X-Amz-Date: &lt;&lt; AMZ DATE &gt;&gt;"</span> \
+-H <span class="hljs-string">"X-Amz-Target: &lt;&lt; REQUEST TARGET &gt;&gt;"</span> \
+-H <span class="hljs-string">"Content-Encoding: amz-1.0"</span> \
+-H <span class="hljs-string">"Authorization: &lt;&lt; AUTH HEADER &gt;&gt;"</span> \
+<span class="hljs-operator">-d</span> <span class="hljs-string">"&lt;&lt; PAYLOAD &gt;&gt;"</span></code></pre>
+                  <div id="cURLModal" class="modal fade" role="dialog">
+                    <div class="modal-dialog modal-lg">
+                      <div class="modal-content" style="height:100%;">
+                        <div class="modal-header">
+                          <button class="close" type="button" data-dismiss="modal">×</button>
+                          <h4 class="modal-title">cURL code snippet</h4>
+                        </div>
+                        <div class="modal-body">
+                          <span id="CopycURLResponseModal" class="btn-clipboard btn-clipboard-Modal" data-toggle="tooltip" data-clipboard-target="#cURLCodeModal" data-placement="left" title="" data-original-title="Copy to clipboard">Copy</span><pre class="pre-scrollable-modal"><code class="bash cURLHJS hljs" id="cURLCodeModal" style="background:#fff;">curl <span class="hljs-string">"https://&lt;&lt; ENDPOINT &gt;&gt;"</span> \
+-H <span class="hljs-string">"Host: &lt;&lt; HOST NAME &gt;&gt;"</span>  \
+-H <span class="hljs-string">"Accept: application/json, text/javascript"</span> \
+-H <span class="hljs-string">"Accept-Language: en-US"</span> \
+-H <span class="hljs-string">"Content-Type: application/json; charset=UTF-8"</span> \
+-H <span class="hljs-string">"X-Amz-Date: &lt;&lt; AMZ DATE &gt;&gt;"</span> \
+-H <span class="hljs-string">"X-Amz-Target: &lt;&lt; REQUEST TARGET &gt;&gt;"</span> \
+-H <span class="hljs-string">"Content-Encoding: amz-1.0"</span> \
+-H <span class="hljs-string">"Authorization: &lt;&lt; AUTH HEADER &gt;&gt;"</span> \
+<span class="hljs-operator">-d</span> <span class="hljs-string">"&lt;&lt; PAYLOAD &gt;&gt;"</span></code></pre>
+                        </div>
+                      </div>
+                    </div>
+                  </div><!-- cURL Modal -->
+                </div>
+              </div><!-- cURL Section -->
+              <div id="PHPSection" class="tab-pane fade">
+                  <div class="well-CS">
+                      <span id="CopyPHP" class="btn-clipboard btn-clipboard-CodeCopy" data-toggle="tooltip" data-placement="top" title="" data-clipboard-target="#PHPCode" data-original-title="Copy to clipboard">Copy</span><span id="FullScreenPHP" class="btn-clipboard-Code" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Full Screen"><span class="glyphicon glyphicon-modal-window"></span></span><pre class="pre-scrollable"><code class="php PHPHJS hljs" id="PHPCode" style="background:#fff;"><span class="hljs-preprocessor">&lt;?php</span>
+
+<span class="hljs-comment">/* Copyright 2018 Amazon.com, Inc. or its affiliates. All Rights Reserved. */</span>
+<span class="hljs-comment">/* Licensed under the Apache License, Version 2.0. */</span>
+
+<span class="hljs-comment">// Put your Secret Key in place of **********</span>
+<span class="hljs-variable">$serviceName</span>=<span class="hljs-string">"ProductAdvertisingAPI"</span>;
+<span class="hljs-variable">$region</span>=<span class="hljs-string">"&lt;&lt; REGION &gt;&gt;"</span>;
+<span class="hljs-variable">$accessKey</span>=<span class="hljs-string">"&lt;&lt; ACCESS_KEY &gt;&gt;"</span>;
+<span class="hljs-variable">$secretKey</span>=<span class="hljs-string">"**********"</span>;
+<span class="hljs-variable">$payload</span>=<span class="hljs-string">"&lt;&lt; PAYLOAD &gt;&gt;"</span>;
+<span class="hljs-variable">$host</span>=<span class="hljs-string">"&lt;&lt; HOST NAME &gt;&gt;"</span>;
+<span class="hljs-variable">$uriPath</span>=<span class="hljs-string">"/&lt;&lt; URI PATH &gt;&gt;"</span>;
+<span class="hljs-variable">$awsv4</span> = <span class="hljs-keyword">new</span> AwsV4 (<span class="hljs-variable">$accessKey</span>, <span class="hljs-variable">$secretKey</span>);
+<span class="hljs-variable">$awsv4</span>-&gt;setRegionName(<span class="hljs-variable">$region</span>);
+<span class="hljs-variable">$awsv4</span>-&gt;setServiceName(<span class="hljs-variable">$serviceName</span>);
+<span class="hljs-variable">$awsv4</span>-&gt;setPath (<span class="hljs-variable">$uriPath</span>);
+<span class="hljs-variable">$awsv4</span>-&gt;setPayload (<span class="hljs-variable">$payload</span>);
+<span class="hljs-variable">$awsv4</span>-&gt;setRequestMethod (<span class="hljs-string">"POST"</span>);
+<span class="hljs-variable">$awsv4</span>-&gt;addHeader (<span class="hljs-string">'content-encoding'</span>, <span class="hljs-string">'amz-1.0'</span>);
+<span class="hljs-variable">$awsv4</span>-&gt;addHeader (<span class="hljs-string">'content-type'</span>, <span class="hljs-string">'application/json; charset=utf-8'</span>);
+<span class="hljs-variable">$awsv4</span>-&gt;addHeader (<span class="hljs-string">'host'</span>, <span class="hljs-variable">$host</span>);
+<span class="hljs-variable">$awsv4</span>-&gt;addHeader (<span class="hljs-string">'x-amz-target'</span>, <span class="hljs-string">'&lt;&lt; REQUEST TARGET &gt;&gt;'</span>);
+<span class="hljs-variable">$headers</span> = <span class="hljs-variable">$awsv4</span>-&gt;getHeaders ();
+<span class="hljs-variable">$headerString</span> = <span class="hljs-string">""</span>;
+<span class="hljs-keyword">foreach</span> ( <span class="hljs-variable">$headers</span> <span class="hljs-keyword">as</span> <span class="hljs-variable">$key</span> =&gt; <span class="hljs-variable">$value</span> ) {
+    <span class="hljs-variable">$headerString</span> .= <span class="hljs-variable">$key</span> . <span class="hljs-string">': '</span> . <span class="hljs-variable">$value</span> . <span class="hljs-string">"\r\n"</span>;
+}
+<span class="hljs-variable">$params</span> = <span class="hljs-keyword">array</span> (
+        <span class="hljs-string">'http'</span> =&gt; <span class="hljs-keyword">array</span> (
+            <span class="hljs-string">'header'</span> =&gt; <span class="hljs-variable">$headerString</span>,
+            <span class="hljs-string">'method'</span> =&gt; <span class="hljs-string">'POST'</span>,
+            <span class="hljs-string">'content'</span> =&gt; <span class="hljs-variable">$payload</span>
+        )
+    );
+<span class="hljs-variable">$stream</span> = stream_context_create ( <span class="hljs-variable">$params</span> );
+
+<span class="hljs-variable">$fp</span> = @fopen ( <span class="hljs-string">'https://'</span>.<span class="hljs-variable">$host</span>.<span class="hljs-variable">$uriPath</span>, <span class="hljs-string">'rb'</span>, <span class="hljs-keyword">false</span>, <span class="hljs-variable">$stream</span> );
+
+<span class="hljs-keyword">if</span> (! <span class="hljs-variable">$fp</span>) {
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-keyword">Exception</span> ( <span class="hljs-string">"Exception Occured"</span> );
+}
+<span class="hljs-variable">$response</span> = @stream_get_contents ( <span class="hljs-variable">$fp</span> );
+<span class="hljs-keyword">if</span> (<span class="hljs-variable">$response</span> === <span class="hljs-keyword">false</span>) {
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-keyword">Exception</span> ( <span class="hljs-string">"Exception Occured"</span> );
+}
+<span class="hljs-keyword">echo</span> <span class="hljs-variable">$response</span>;
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">AwsV4</span> </span>{
+
+    <span class="hljs-keyword">private</span> <span class="hljs-variable">$accessKey</span> = <span class="hljs-keyword">null</span>;
+    <span class="hljs-keyword">private</span> <span class="hljs-variable">$secretKey</span> = <span class="hljs-keyword">null</span>;
+    <span class="hljs-keyword">private</span> <span class="hljs-variable">$path</span> = <span class="hljs-keyword">null</span>;
+    <span class="hljs-keyword">private</span> <span class="hljs-variable">$regionName</span> = <span class="hljs-keyword">null</span>;
+    <span class="hljs-keyword">private</span> <span class="hljs-variable">$serviceName</span> = <span class="hljs-keyword">null</span>;
+    <span class="hljs-keyword">private</span> <span class="hljs-variable">$httpMethodName</span> = <span class="hljs-keyword">null</span>;
+    <span class="hljs-keyword">private</span> <span class="hljs-variable">$queryParametes</span> = <span class="hljs-keyword">array</span> ();
+    <span class="hljs-keyword">private</span> <span class="hljs-variable">$awsHeaders</span> = <span class="hljs-keyword">array</span> ();
+    <span class="hljs-keyword">private</span> <span class="hljs-variable">$payload</span> = <span class="hljs-string">""</span>;
+
+    <span class="hljs-keyword">private</span> <span class="hljs-variable">$HMACAlgorithm</span> = <span class="hljs-string">"AWS4-HMAC-SHA256"</span>;
+    <span class="hljs-keyword">private</span> <span class="hljs-variable">$aws4Request</span> = <span class="hljs-string">"aws4_request"</span>;
+    <span class="hljs-keyword">private</span> <span class="hljs-variable">$strSignedHeader</span> = <span class="hljs-keyword">null</span>;
+    <span class="hljs-keyword">private</span> <span class="hljs-variable">$xAmzDate</span> = <span class="hljs-keyword">null</span>;
+    <span class="hljs-keyword">private</span> <span class="hljs-variable">$currentDate</span> = <span class="hljs-keyword">null</span>;
+
+    <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">__construct</span><span class="hljs-params">(<span class="hljs-variable">$accessKey</span>, <span class="hljs-variable">$secretKey</span>)</span> </span>{
+        <span class="hljs-variable">$this</span>-&gt;accessKey = <span class="hljs-variable">$accessKey</span>;
+        <span class="hljs-variable">$this</span>-&gt;secretKey = <span class="hljs-variable">$secretKey</span>;
+        <span class="hljs-variable">$this</span>-&gt;xAmzDate = <span class="hljs-variable">$this</span>-&gt;getTimeStamp ();
+        <span class="hljs-variable">$this</span>-&gt;currentDate = <span class="hljs-variable">$this</span>-&gt;getDate ();
+    }
+
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setPath</span><span class="hljs-params">(<span class="hljs-variable">$path</span>)</span> </span>{
+        <span class="hljs-variable">$this</span>-&gt;path = <span class="hljs-variable">$path</span>;
+    }
+
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setServiceName</span><span class="hljs-params">(<span class="hljs-variable">$serviceName</span>)</span> </span>{
+        <span class="hljs-variable">$this</span>-&gt;serviceName = <span class="hljs-variable">$serviceName</span>;
+    }
+
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setRegionName</span><span class="hljs-params">(<span class="hljs-variable">$regionName</span>)</span> </span>{
+        <span class="hljs-variable">$this</span>-&gt;regionName = <span class="hljs-variable">$regionName</span>;
+    }
+
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setPayload</span><span class="hljs-params">(<span class="hljs-variable">$payload</span>)</span> </span>{
+        <span class="hljs-variable">$this</span>-&gt;payload = <span class="hljs-variable">$payload</span>;
+    }
+
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setRequestMethod</span><span class="hljs-params">(<span class="hljs-variable">$method</span>)</span> </span>{
+        <span class="hljs-variable">$this</span>-&gt;httpMethodName = <span class="hljs-variable">$method</span>;
+    }
+
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">addHeader</span><span class="hljs-params">(<span class="hljs-variable">$headerName</span>, <span class="hljs-variable">$headerValue</span>)</span> </span>{
+        <span class="hljs-variable">$this</span>-&gt;awsHeaders [<span class="hljs-variable">$headerName</span>] = <span class="hljs-variable">$headerValue</span>;
+    }
+
+    <span class="hljs-keyword">private</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">prepareCanonicalRequest</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-variable">$canonicalURL</span> = <span class="hljs-string">""</span>;
+        <span class="hljs-variable">$canonicalURL</span> .= <span class="hljs-variable">$this</span>-&gt;httpMethodName . <span class="hljs-string">"\n"</span>;
+        <span class="hljs-variable">$canonicalURL</span> .= <span class="hljs-variable">$this</span>-&gt;path . <span class="hljs-string">"\n"</span> . <span class="hljs-string">"\n"</span>;
+        <span class="hljs-variable">$signedHeaders</span> = <span class="hljs-string">''</span>;
+        <span class="hljs-keyword">foreach</span> ( <span class="hljs-variable">$this</span>-&gt;awsHeaders <span class="hljs-keyword">as</span> <span class="hljs-variable">$key</span> =&gt; <span class="hljs-variable">$value</span> ) {
+            <span class="hljs-variable">$signedHeaders</span> .= <span class="hljs-variable">$key</span> . <span class="hljs-string">";"</span>;
+            <span class="hljs-variable">$canonicalURL</span> .= <span class="hljs-variable">$key</span> . <span class="hljs-string">":"</span> . <span class="hljs-variable">$value</span> . <span class="hljs-string">"\n"</span>;
+        }
+        <span class="hljs-variable">$canonicalURL</span> .= <span class="hljs-string">"\n"</span>;
+        <span class="hljs-variable">$this</span>-&gt;strSignedHeader = substr ( <span class="hljs-variable">$signedHeaders</span>, <span class="hljs-number">0</span>, - <span class="hljs-number">1</span> );
+        <span class="hljs-variable">$canonicalURL</span> .= <span class="hljs-variable">$this</span>-&gt;strSignedHeader . <span class="hljs-string">"\n"</span>;
+        <span class="hljs-variable">$canonicalURL</span> .= <span class="hljs-variable">$this</span>-&gt;generateHex ( <span class="hljs-variable">$this</span>-&gt;payload );
+        <span class="hljs-keyword">return</span> <span class="hljs-variable">$canonicalURL</span>;
+    }
+
+    <span class="hljs-keyword">private</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">prepareStringToSign</span><span class="hljs-params">(<span class="hljs-variable">$canonicalURL</span>)</span> </span>{
+        <span class="hljs-variable">$stringToSign</span> = <span class="hljs-string">''</span>;
+        <span class="hljs-variable">$stringToSign</span> .= <span class="hljs-variable">$this</span>-&gt;HMACAlgorithm . <span class="hljs-string">"\n"</span>;
+        <span class="hljs-variable">$stringToSign</span> .= <span class="hljs-variable">$this</span>-&gt;xAmzDate . <span class="hljs-string">"\n"</span>;
+        <span class="hljs-variable">$stringToSign</span> .= <span class="hljs-variable">$this</span>-&gt;currentDate . <span class="hljs-string">"/"</span> . <span class="hljs-variable">$this</span>-&gt;regionName . <span class="hljs-string">"/"</span> . <span class="hljs-variable">$this</span>-&gt;serviceName . <span class="hljs-string">"/"</span> . <span class="hljs-variable">$this</span>-&gt;aws4Request . <span class="hljs-string">"\n"</span>;
+        <span class="hljs-variable">$stringToSign</span> .= <span class="hljs-variable">$this</span>-&gt;generateHex ( <span class="hljs-variable">$canonicalURL</span> );
+        <span class="hljs-keyword">return</span> <span class="hljs-variable">$stringToSign</span>;
+    }
+
+    <span class="hljs-keyword">private</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">calculateSignature</span><span class="hljs-params">(<span class="hljs-variable">$stringToSign</span>)</span> </span>{
+        <span class="hljs-variable">$signatureKey</span> = <span class="hljs-variable">$this</span>-&gt;getSignatureKey ( <span class="hljs-variable">$this</span>-&gt;secretKey, <span class="hljs-variable">$this</span>-&gt;currentDate, <span class="hljs-variable">$this</span>-&gt;regionName, <span class="hljs-variable">$this</span>-&gt;serviceName );
+        <span class="hljs-variable">$signature</span> = hash_hmac ( <span class="hljs-string">"sha256"</span>, <span class="hljs-variable">$stringToSign</span>, <span class="hljs-variable">$signatureKey</span>, <span class="hljs-keyword">true</span> );
+        <span class="hljs-variable">$strHexSignature</span> = strtolower ( bin2hex ( <span class="hljs-variable">$signature</span> ) );
+        <span class="hljs-keyword">return</span> <span class="hljs-variable">$strHexSignature</span>;
+    }
+
+    <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getHeaders</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-variable">$this</span>-&gt;awsHeaders [<span class="hljs-string">'x-amz-date'</span>] = <span class="hljs-variable">$this</span>-&gt;xAmzDate;
+        ksort ( <span class="hljs-variable">$this</span>-&gt;awsHeaders );
+
+        <span class="hljs-comment">// Step 1: CREATE A CANONICAL REQUEST</span>
+        <span class="hljs-variable">$canonicalURL</span> = <span class="hljs-variable">$this</span>-&gt;prepareCanonicalRequest ();
+
+        <span class="hljs-comment">// Step 2: CREATE THE STRING TO SIGN</span>
+        <span class="hljs-variable">$stringToSign</span> = <span class="hljs-variable">$this</span>-&gt;prepareStringToSign ( <span class="hljs-variable">$canonicalURL</span> );
+
+        <span class="hljs-comment">// Step 3: CALCULATE THE SIGNATURE</span>
+        <span class="hljs-variable">$signature</span> = <span class="hljs-variable">$this</span>-&gt;calculateSignature ( <span class="hljs-variable">$stringToSign</span> );
+
+        <span class="hljs-comment">// Step 4: CALCULATE AUTHORIZATION HEADER</span>
+        <span class="hljs-keyword">if</span> (<span class="hljs-variable">$signature</span>) {
+            <span class="hljs-variable">$this</span>-&gt;awsHeaders [<span class="hljs-string">'Authorization'</span>] = <span class="hljs-variable">$this</span>-&gt;buildAuthorizationString ( <span class="hljs-variable">$signature</span> );
+            <span class="hljs-keyword">return</span> <span class="hljs-variable">$this</span>-&gt;awsHeaders;
+        }
+    }
+
+    <span class="hljs-keyword">private</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">buildAuthorizationString</span><span class="hljs-params">(<span class="hljs-variable">$strSignature</span>)</span> </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-variable">$this</span>-&gt;HMACAlgorithm . <span class="hljs-string">" "</span> . <span class="hljs-string">"Credential="</span> . <span class="hljs-variable">$this</span>-&gt;accessKey . <span class="hljs-string">"/"</span> . <span class="hljs-variable">$this</span>-&gt;getDate () . <span class="hljs-string">"/"</span> . <span class="hljs-variable">$this</span>-&gt;regionName . <span class="hljs-string">"/"</span> . <span class="hljs-variable">$this</span>-&gt;serviceName . <span class="hljs-string">"/"</span> . <span class="hljs-variable">$this</span>-&gt;aws4Request . <span class="hljs-string">","</span> . <span class="hljs-string">"SignedHeaders="</span> . <span class="hljs-variable">$this</span>-&gt;strSignedHeader . <span class="hljs-string">","</span> . <span class="hljs-string">"Signature="</span> . <span class="hljs-variable">$strSignature</span>;
+    }
+
+    <span class="hljs-keyword">private</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">generateHex</span><span class="hljs-params">(<span class="hljs-variable">$data</span>)</span> </span>{
+        <span class="hljs-keyword">return</span> strtolower ( bin2hex ( hash ( <span class="hljs-string">"sha256"</span>, <span class="hljs-variable">$data</span>, <span class="hljs-keyword">true</span> ) ) );
+    }
+
+    <span class="hljs-keyword">private</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getSignatureKey</span><span class="hljs-params">(<span class="hljs-variable">$key</span>, <span class="hljs-variable">$date</span>, <span class="hljs-variable">$regionName</span>, <span class="hljs-variable">$serviceName</span>)</span> </span>{
+        <span class="hljs-variable">$kSecret</span> = <span class="hljs-string">"AWS4"</span> . <span class="hljs-variable">$key</span>;
+        <span class="hljs-variable">$kDate</span> = hash_hmac ( <span class="hljs-string">"sha256"</span>, <span class="hljs-variable">$date</span>, <span class="hljs-variable">$kSecret</span>, <span class="hljs-keyword">true</span> );
+        <span class="hljs-variable">$kRegion</span> = hash_hmac ( <span class="hljs-string">"sha256"</span>, <span class="hljs-variable">$regionName</span>, <span class="hljs-variable">$kDate</span>, <span class="hljs-keyword">true</span> );
+        <span class="hljs-variable">$kService</span> = hash_hmac ( <span class="hljs-string">"sha256"</span>, <span class="hljs-variable">$serviceName</span>, <span class="hljs-variable">$kRegion</span>, <span class="hljs-keyword">true</span> );
+        <span class="hljs-variable">$kSigning</span> = hash_hmac ( <span class="hljs-string">"sha256"</span>, <span class="hljs-variable">$this</span>-&gt;aws4Request, <span class="hljs-variable">$kService</span>, <span class="hljs-keyword">true</span> );
+
+        <span class="hljs-keyword">return</span> <span class="hljs-variable">$kSigning</span>;
+    }
+
+    <span class="hljs-keyword">private</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getTimeStamp</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">return</span> gmdate ( <span class="hljs-string">"Ymd\THis\Z"</span> );
+    }
+
+    <span class="hljs-keyword">private</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getDate</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">return</span> gmdate ( <span class="hljs-string">"Ymd"</span> );
+    }
+}
+<span class="hljs-preprocessor">?&gt;</span></code></pre>
+                      <div id="PHPModal" class="modal fade" role="dialog">
+                        <div class="modal-dialog modal-lg">
+                          <div class="modal-content" style="height:100%;">
+                            <div class="modal-header">
+                              <button class="close" type="button" data-dismiss="modal">×</button>
+                              <h4 class="modal-title">PHP code snippet</h4>
+                            </div>
+                            <div class="modal-body">
+                              <span id="CopyPHPModal" class="btn-clipboard btn-clipboard-Modal" data-toggle="tooltip" data-clipboard-target="#PHPCodeModal" data-placement="left" title="" data-original-title="Copy to clipboard">Copy</span><pre class="pre-scrollable-modal"><code class="php PHPHJS hljs" id="PHPCodeModal" style="background:#fff;"><span class="hljs-preprocessor">&lt;?php</span>
+
+<span class="hljs-comment">/* Copyright 2018 Amazon.com, Inc. or its affiliates. All Rights Reserved. */</span>
+<span class="hljs-comment">/* Licensed under the Apache License, Version 2.0. */</span>
+
+<span class="hljs-comment">// Put your Secret Key in place of **********</span>
+<span class="hljs-variable">$serviceName</span>=<span class="hljs-string">"ProductAdvertisingAPI"</span>;
+<span class="hljs-variable">$region</span>=<span class="hljs-string">"&lt;&lt; REGION &gt;&gt;"</span>;
+<span class="hljs-variable">$accessKey</span>=<span class="hljs-string">"&lt;&lt; ACCESS_KEY &gt;&gt;"</span>;
+<span class="hljs-variable">$secretKey</span>=<span class="hljs-string">"**********"</span>;
+<span class="hljs-variable">$payload</span>=<span class="hljs-string">"&lt;&lt; PAYLOAD &gt;&gt;"</span>;
+<span class="hljs-variable">$host</span>=<span class="hljs-string">"&lt;&lt; HOST NAME &gt;&gt;"</span>;
+<span class="hljs-variable">$uriPath</span>=<span class="hljs-string">"/&lt;&lt; URI PATH &gt;&gt;"</span>;
+<span class="hljs-variable">$awsv4</span> = <span class="hljs-keyword">new</span> AwsV4 (<span class="hljs-variable">$accessKey</span>, <span class="hljs-variable">$secretKey</span>);
+<span class="hljs-variable">$awsv4</span>-&gt;setRegionName(<span class="hljs-variable">$region</span>);
+<span class="hljs-variable">$awsv4</span>-&gt;setServiceName(<span class="hljs-variable">$serviceName</span>);
+<span class="hljs-variable">$awsv4</span>-&gt;setPath (<span class="hljs-variable">$uriPath</span>);
+<span class="hljs-variable">$awsv4</span>-&gt;setPayload (<span class="hljs-variable">$payload</span>);
+<span class="hljs-variable">$awsv4</span>-&gt;setRequestMethod (<span class="hljs-string">"POST"</span>);
+<span class="hljs-variable">$awsv4</span>-&gt;addHeader (<span class="hljs-string">'content-encoding'</span>, <span class="hljs-string">'amz-1.0'</span>);
+<span class="hljs-variable">$awsv4</span>-&gt;addHeader (<span class="hljs-string">'content-type'</span>, <span class="hljs-string">'application/json; charset=utf-8'</span>);
+<span class="hljs-variable">$awsv4</span>-&gt;addHeader (<span class="hljs-string">'host'</span>, <span class="hljs-variable">$host</span>);
+<span class="hljs-variable">$awsv4</span>-&gt;addHeader (<span class="hljs-string">'x-amz-target'</span>, <span class="hljs-string">'&lt;&lt; REQUEST TARGET &gt;&gt;'</span>);
+<span class="hljs-variable">$headers</span> = <span class="hljs-variable">$awsv4</span>-&gt;getHeaders ();
+<span class="hljs-variable">$headerString</span> = <span class="hljs-string">""</span>;
+<span class="hljs-keyword">foreach</span> ( <span class="hljs-variable">$headers</span> <span class="hljs-keyword">as</span> <span class="hljs-variable">$key</span> =&gt; <span class="hljs-variable">$value</span> ) {
+    <span class="hljs-variable">$headerString</span> .= <span class="hljs-variable">$key</span> . <span class="hljs-string">': '</span> . <span class="hljs-variable">$value</span> . <span class="hljs-string">"\r\n"</span>;
+}
+<span class="hljs-variable">$params</span> = <span class="hljs-keyword">array</span> (
+        <span class="hljs-string">'http'</span> =&gt; <span class="hljs-keyword">array</span> (
+            <span class="hljs-string">'header'</span> =&gt; <span class="hljs-variable">$headerString</span>,
+            <span class="hljs-string">'method'</span> =&gt; <span class="hljs-string">'POST'</span>,
+            <span class="hljs-string">'content'</span> =&gt; <span class="hljs-variable">$payload</span>
+        )
+    );
+<span class="hljs-variable">$stream</span> = stream_context_create ( <span class="hljs-variable">$params</span> );
+
+<span class="hljs-variable">$fp</span> = @fopen ( <span class="hljs-string">'https://'</span>.<span class="hljs-variable">$host</span>.<span class="hljs-variable">$uriPath</span>, <span class="hljs-string">'rb'</span>, <span class="hljs-keyword">false</span>, <span class="hljs-variable">$stream</span> );
+
+<span class="hljs-keyword">if</span> (! <span class="hljs-variable">$fp</span>) {
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-keyword">Exception</span> ( <span class="hljs-string">"Exception Occured"</span> );
+}
+<span class="hljs-variable">$response</span> = @stream_get_contents ( <span class="hljs-variable">$fp</span> );
+<span class="hljs-keyword">if</span> (<span class="hljs-variable">$response</span> === <span class="hljs-keyword">false</span>) {
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-keyword">Exception</span> ( <span class="hljs-string">"Exception Occured"</span> );
+}
+<span class="hljs-keyword">echo</span> <span class="hljs-variable">$response</span>;
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">AwsV4</span> </span>{
+
+    <span class="hljs-keyword">private</span> <span class="hljs-variable">$accessKey</span> = <span class="hljs-keyword">null</span>;
+    <span class="hljs-keyword">private</span> <span class="hljs-variable">$secretKey</span> = <span class="hljs-keyword">null</span>;
+    <span class="hljs-keyword">private</span> <span class="hljs-variable">$path</span> = <span class="hljs-keyword">null</span>;
+    <span class="hljs-keyword">private</span> <span class="hljs-variable">$regionName</span> = <span class="hljs-keyword">null</span>;
+    <span class="hljs-keyword">private</span> <span class="hljs-variable">$serviceName</span> = <span class="hljs-keyword">null</span>;
+    <span class="hljs-keyword">private</span> <span class="hljs-variable">$httpMethodName</span> = <span class="hljs-keyword">null</span>;
+    <span class="hljs-keyword">private</span> <span class="hljs-variable">$queryParametes</span> = <span class="hljs-keyword">array</span> ();
+    <span class="hljs-keyword">private</span> <span class="hljs-variable">$awsHeaders</span> = <span class="hljs-keyword">array</span> ();
+    <span class="hljs-keyword">private</span> <span class="hljs-variable">$payload</span> = <span class="hljs-string">""</span>;
+
+    <span class="hljs-keyword">private</span> <span class="hljs-variable">$HMACAlgorithm</span> = <span class="hljs-string">"AWS4-HMAC-SHA256"</span>;
+    <span class="hljs-keyword">private</span> <span class="hljs-variable">$aws4Request</span> = <span class="hljs-string">"aws4_request"</span>;
+    <span class="hljs-keyword">private</span> <span class="hljs-variable">$strSignedHeader</span> = <span class="hljs-keyword">null</span>;
+    <span class="hljs-keyword">private</span> <span class="hljs-variable">$xAmzDate</span> = <span class="hljs-keyword">null</span>;
+    <span class="hljs-keyword">private</span> <span class="hljs-variable">$currentDate</span> = <span class="hljs-keyword">null</span>;
+
+    <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">__construct</span><span class="hljs-params">(<span class="hljs-variable">$accessKey</span>, <span class="hljs-variable">$secretKey</span>)</span> </span>{
+        <span class="hljs-variable">$this</span>-&gt;accessKey = <span class="hljs-variable">$accessKey</span>;
+        <span class="hljs-variable">$this</span>-&gt;secretKey = <span class="hljs-variable">$secretKey</span>;
+        <span class="hljs-variable">$this</span>-&gt;xAmzDate = <span class="hljs-variable">$this</span>-&gt;getTimeStamp ();
+        <span class="hljs-variable">$this</span>-&gt;currentDate = <span class="hljs-variable">$this</span>-&gt;getDate ();
+    }
+
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setPath</span><span class="hljs-params">(<span class="hljs-variable">$path</span>)</span> </span>{
+        <span class="hljs-variable">$this</span>-&gt;path = <span class="hljs-variable">$path</span>;
+    }
+
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setServiceName</span><span class="hljs-params">(<span class="hljs-variable">$serviceName</span>)</span> </span>{
+        <span class="hljs-variable">$this</span>-&gt;serviceName = <span class="hljs-variable">$serviceName</span>;
+    }
+
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setRegionName</span><span class="hljs-params">(<span class="hljs-variable">$regionName</span>)</span> </span>{
+        <span class="hljs-variable">$this</span>-&gt;regionName = <span class="hljs-variable">$regionName</span>;
+    }
+
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setPayload</span><span class="hljs-params">(<span class="hljs-variable">$payload</span>)</span> </span>{
+        <span class="hljs-variable">$this</span>-&gt;payload = <span class="hljs-variable">$payload</span>;
+    }
+
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setRequestMethod</span><span class="hljs-params">(<span class="hljs-variable">$method</span>)</span> </span>{
+        <span class="hljs-variable">$this</span>-&gt;httpMethodName = <span class="hljs-variable">$method</span>;
+    }
+
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">addHeader</span><span class="hljs-params">(<span class="hljs-variable">$headerName</span>, <span class="hljs-variable">$headerValue</span>)</span> </span>{
+        <span class="hljs-variable">$this</span>-&gt;awsHeaders [<span class="hljs-variable">$headerName</span>] = <span class="hljs-variable">$headerValue</span>;
+    }
+
+    <span class="hljs-keyword">private</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">prepareCanonicalRequest</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-variable">$canonicalURL</span> = <span class="hljs-string">""</span>;
+        <span class="hljs-variable">$canonicalURL</span> .= <span class="hljs-variable">$this</span>-&gt;httpMethodName . <span class="hljs-string">"\n"</span>;
+        <span class="hljs-variable">$canonicalURL</span> .= <span class="hljs-variable">$this</span>-&gt;path . <span class="hljs-string">"\n"</span> . <span class="hljs-string">"\n"</span>;
+        <span class="hljs-variable">$signedHeaders</span> = <span class="hljs-string">''</span>;
+        <span class="hljs-keyword">foreach</span> ( <span class="hljs-variable">$this</span>-&gt;awsHeaders <span class="hljs-keyword">as</span> <span class="hljs-variable">$key</span> =&gt; <span class="hljs-variable">$value</span> ) {
+            <span class="hljs-variable">$signedHeaders</span> .= <span class="hljs-variable">$key</span> . <span class="hljs-string">";"</span>;
+            <span class="hljs-variable">$canonicalURL</span> .= <span class="hljs-variable">$key</span> . <span class="hljs-string">":"</span> . <span class="hljs-variable">$value</span> . <span class="hljs-string">"\n"</span>;
+        }
+        <span class="hljs-variable">$canonicalURL</span> .= <span class="hljs-string">"\n"</span>;
+        <span class="hljs-variable">$this</span>-&gt;strSignedHeader = substr ( <span class="hljs-variable">$signedHeaders</span>, <span class="hljs-number">0</span>, - <span class="hljs-number">1</span> );
+        <span class="hljs-variable">$canonicalURL</span> .= <span class="hljs-variable">$this</span>-&gt;strSignedHeader . <span class="hljs-string">"\n"</span>;
+        <span class="hljs-variable">$canonicalURL</span> .= <span class="hljs-variable">$this</span>-&gt;generateHex ( <span class="hljs-variable">$this</span>-&gt;payload );
+        <span class="hljs-keyword">return</span> <span class="hljs-variable">$canonicalURL</span>;
+    }
+
+    <span class="hljs-keyword">private</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">prepareStringToSign</span><span class="hljs-params">(<span class="hljs-variable">$canonicalURL</span>)</span> </span>{
+        <span class="hljs-variable">$stringToSign</span> = <span class="hljs-string">''</span>;
+        <span class="hljs-variable">$stringToSign</span> .= <span class="hljs-variable">$this</span>-&gt;HMACAlgorithm . <span class="hljs-string">"\n"</span>;
+        <span class="hljs-variable">$stringToSign</span> .= <span class="hljs-variable">$this</span>-&gt;xAmzDate . <span class="hljs-string">"\n"</span>;
+        <span class="hljs-variable">$stringToSign</span> .= <span class="hljs-variable">$this</span>-&gt;currentDate . <span class="hljs-string">"/"</span> . <span class="hljs-variable">$this</span>-&gt;regionName . <span class="hljs-string">"/"</span> . <span class="hljs-variable">$this</span>-&gt;serviceName . <span class="hljs-string">"/"</span> . <span class="hljs-variable">$this</span>-&gt;aws4Request . <span class="hljs-string">"\n"</span>;
+        <span class="hljs-variable">$stringToSign</span> .= <span class="hljs-variable">$this</span>-&gt;generateHex ( <span class="hljs-variable">$canonicalURL</span> );
+        <span class="hljs-keyword">return</span> <span class="hljs-variable">$stringToSign</span>;
+    }
+
+    <span class="hljs-keyword">private</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">calculateSignature</span><span class="hljs-params">(<span class="hljs-variable">$stringToSign</span>)</span> </span>{
+        <span class="hljs-variable">$signatureKey</span> = <span class="hljs-variable">$this</span>-&gt;getSignatureKey ( <span class="hljs-variable">$this</span>-&gt;secretKey, <span class="hljs-variable">$this</span>-&gt;currentDate, <span class="hljs-variable">$this</span>-&gt;regionName, <span class="hljs-variable">$this</span>-&gt;serviceName );
+        <span class="hljs-variable">$signature</span> = hash_hmac ( <span class="hljs-string">"sha256"</span>, <span class="hljs-variable">$stringToSign</span>, <span class="hljs-variable">$signatureKey</span>, <span class="hljs-keyword">true</span> );
+        <span class="hljs-variable">$strHexSignature</span> = strtolower ( bin2hex ( <span class="hljs-variable">$signature</span> ) );
+        <span class="hljs-keyword">return</span> <span class="hljs-variable">$strHexSignature</span>;
+    }
+
+    <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getHeaders</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-variable">$this</span>-&gt;awsHeaders [<span class="hljs-string">'x-amz-date'</span>] = <span class="hljs-variable">$this</span>-&gt;xAmzDate;
+        ksort ( <span class="hljs-variable">$this</span>-&gt;awsHeaders );
+
+        <span class="hljs-comment">// Step 1: CREATE A CANONICAL REQUEST</span>
+        <span class="hljs-variable">$canonicalURL</span> = <span class="hljs-variable">$this</span>-&gt;prepareCanonicalRequest ();
+
+        <span class="hljs-comment">// Step 2: CREATE THE STRING TO SIGN</span>
+        <span class="hljs-variable">$stringToSign</span> = <span class="hljs-variable">$this</span>-&gt;prepareStringToSign ( <span class="hljs-variable">$canonicalURL</span> );
+
+        <span class="hljs-comment">// Step 3: CALCULATE THE SIGNATURE</span>
+        <span class="hljs-variable">$signature</span> = <span class="hljs-variable">$this</span>-&gt;calculateSignature ( <span class="hljs-variable">$stringToSign</span> );
+
+        <span class="hljs-comment">// Step 4: CALCULATE AUTHORIZATION HEADER</span>
+        <span class="hljs-keyword">if</span> (<span class="hljs-variable">$signature</span>) {
+            <span class="hljs-variable">$this</span>-&gt;awsHeaders [<span class="hljs-string">'Authorization'</span>] = <span class="hljs-variable">$this</span>-&gt;buildAuthorizationString ( <span class="hljs-variable">$signature</span> );
+            <span class="hljs-keyword">return</span> <span class="hljs-variable">$this</span>-&gt;awsHeaders;
+        }
+    }
+
+    <span class="hljs-keyword">private</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">buildAuthorizationString</span><span class="hljs-params">(<span class="hljs-variable">$strSignature</span>)</span> </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-variable">$this</span>-&gt;HMACAlgorithm . <span class="hljs-string">" "</span> . <span class="hljs-string">"Credential="</span> . <span class="hljs-variable">$this</span>-&gt;accessKey . <span class="hljs-string">"/"</span> . <span class="hljs-variable">$this</span>-&gt;getDate () . <span class="hljs-string">"/"</span> . <span class="hljs-variable">$this</span>-&gt;regionName . <span class="hljs-string">"/"</span> . <span class="hljs-variable">$this</span>-&gt;serviceName . <span class="hljs-string">"/"</span> . <span class="hljs-variable">$this</span>-&gt;aws4Request . <span class="hljs-string">","</span> . <span class="hljs-string">"SignedHeaders="</span> . <span class="hljs-variable">$this</span>-&gt;strSignedHeader . <span class="hljs-string">","</span> . <span class="hljs-string">"Signature="</span> . <span class="hljs-variable">$strSignature</span>;
+    }
+
+    <span class="hljs-keyword">private</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">generateHex</span><span class="hljs-params">(<span class="hljs-variable">$data</span>)</span> </span>{
+        <span class="hljs-keyword">return</span> strtolower ( bin2hex ( hash ( <span class="hljs-string">"sha256"</span>, <span class="hljs-variable">$data</span>, <span class="hljs-keyword">true</span> ) ) );
+    }
+
+    <span class="hljs-keyword">private</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getSignatureKey</span><span class="hljs-params">(<span class="hljs-variable">$key</span>, <span class="hljs-variable">$date</span>, <span class="hljs-variable">$regionName</span>, <span class="hljs-variable">$serviceName</span>)</span> </span>{
+        <span class="hljs-variable">$kSecret</span> = <span class="hljs-string">"AWS4"</span> . <span class="hljs-variable">$key</span>;
+        <span class="hljs-variable">$kDate</span> = hash_hmac ( <span class="hljs-string">"sha256"</span>, <span class="hljs-variable">$date</span>, <span class="hljs-variable">$kSecret</span>, <span class="hljs-keyword">true</span> );
+        <span class="hljs-variable">$kRegion</span> = hash_hmac ( <span class="hljs-string">"sha256"</span>, <span class="hljs-variable">$regionName</span>, <span class="hljs-variable">$kDate</span>, <span class="hljs-keyword">true</span> );
+        <span class="hljs-variable">$kService</span> = hash_hmac ( <span class="hljs-string">"sha256"</span>, <span class="hljs-variable">$serviceName</span>, <span class="hljs-variable">$kRegion</span>, <span class="hljs-keyword">true</span> );
+        <span class="hljs-variable">$kSigning</span> = hash_hmac ( <span class="hljs-string">"sha256"</span>, <span class="hljs-variable">$this</span>-&gt;aws4Request, <span class="hljs-variable">$kService</span>, <span class="hljs-keyword">true</span> );
+
+        <span class="hljs-keyword">return</span> <span class="hljs-variable">$kSigning</span>;
+    }
+
+    <span class="hljs-keyword">private</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getTimeStamp</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">return</span> gmdate ( <span class="hljs-string">"Ymd\THis\Z"</span> );
+    }
+
+    <span class="hljs-keyword">private</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getDate</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">return</span> gmdate ( <span class="hljs-string">"Ymd"</span> );
+    }
+}
+<span class="hljs-preprocessor">?&gt;</span></code></pre>
+                            </div>
+                          </div>
+                        </div>    
+                      </div><!-- PHP Modal -->
+                  </div>
+              </div><!-- PHP Section -->
+              <div id="RORSection" class="tab-pane fade">
+                <div class="well-CS">
+                  <span id="CopyROR" class="btn-clipboard-CodeCopy" data-toggle="tooltip" data-placement="top" title="" data-clipboard-target="#RORCode" data-original-title="Copy to clipboard">Copy</span><span id="FullScreenROR" class="btn-clipboard-Code" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Full Screen"><span class="glyphicon glyphicon-modal-window"></span></span><pre class="pre-scrollable"><code class="ruby RORHJS" id="RORCode" style="background:#fff;"></code></pre>
+                  <div id="RORModal" class="modal fade" role="dialog">
+                    <div class="modal-dialog modal-lg">
+                      <div class="modal-content" style="height:100%;">
+                        <div class="modal-header">
+                          <button class="close" type="button" data-dismiss="modal">×</button>
+                          <h4 class="modal-title">ROR code snippet</h4>
+                        </div>
+                        <div class="modal-body">
+                          <span id="CopyRORModal" class="btn-clipboard btn-clipboard-Modal" data-toggle="tooltip" data-clipboard-target="#RORCodeModal" data-placement="left" title="" data-original-title="Copy to clipboard">Copy</span><pre class="pre-scrollable-modal"><code class="ruby RORHJS" id="RORCodeModal" style="background:#fff;"></code></pre>
+                        </div>
+                      </div>
+                    </div>    
+                  </div><!-- ROR Modal --> 
+                </div>
+              </div><!-- ROR Section -->
+              <div id="HTMLSection" class="tab-pane fade">
+                <div class="well-CS">
+                  <span id="CopyHTML" class="btn-clipboard-CodeCopy" data-toggle="tooltip" data-placement="top" title="" data-clipboard-target="#HTMLCode" data-original-title="Copy to clipboard">Copy</span><span id="FullScreenHTML" class="btn-clipboard-Code" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Full Screen"><span class="glyphicon glyphicon-modal-window"></span></span><pre class="pre-scrollable"><code class="html HTMLHJS" id="HTMLCode" style="background:#fff;"></code></pre>
+                  <div id="HTMLModal" class="modal fade" role="dialog">
+                    <div class="modal-dialog modal-lg">
+                      <div class="modal-content" style="height:100%;">
+                        <div class="modal-header">
+                          <button class="close" type="button" data-dismiss="modal">×</button>
+                          <h4 class="modal-title">Add To Cart Button HTML code snippet</h4>
+                        </div>
+                        <div class="modal-body">
+                          <span id="CopyHTMLModal" class="btn-clipboard btn-clipboard-Modal" data-toggle="tooltip" data-clipboard-target="#HTMLCodeModal" data-placement="left" title="" data-original-title="Copy to clipboard">Copy</span><pre class="pre-scrollable-modal"><code class="html HTMLHJS" id="HTMLCodeModal" style="background:#fff;"></code></pre>
+                        </div>
+                      </div>
+                    </div>
+                  </div><!-- HTML Modal --> 
+                </div>
+              </div><!-- HTML Section -->
+            </div><!-- Tab-Content Code Snippets -->
+            <div class="well-FR">
+              <button id="SaveCode" type="button" class="btn btn-dark-a" style="float:right;">Save code</button>
+              <div class="clearfix"></div>
+            </div><!-- Well for Formatted Response-->
+          </div><!--Operations Page -->
+        </div><!--container for right section-->
+      </div><!-- row -->
+    </div><!-- container -->
